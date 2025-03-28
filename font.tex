@@ -1,0 +1,32 @@
+% 正文小四
+\zihao{-4}
+% 修改边距, showframe 显示边距的参考线
+\geometry{top=2.54cm, bottom=2.54cm, left=3.17cm, right=3.17cm}
+
+% 修改中文的罗马字体为 SimSong
+\setCJKmainfont{SimSong}        % 中文主字体（衬线体）使用宋体
+
+% 修改 \sffamily 使用的中文字体
+\setCJKsansfont{STHeiti}      
+
+% 修改 \heiti 使用的字体 
+% \heiti 不会影响数字和英文字体 \sffamily 会影响数字和英文字体
+\setCJKfamilyfont{hei}{STHeiti}
+\renewcommand{\heiti}{\CJKfamily{hei}}
+
+\setmainfont{Times New Roman}  % 英文主字体（衬线体）
+\setsansfont{Arial}            % 英文无衬线体
+
+% 默认行间距20磅 用 \resetbaseskip 设置
+\newcommand{\resetbaseskip}{\setlength{\baselineskip}{20pt}}
+
+% 定义 Python 代码片段格式
+\lstset{
+  language=Python,             % 设置语言
+  basicstyle=\ttfamily\small,  % 设置字体
+  keywordstyle=\color{blue},   % 关键字颜色
+  stringstyle=\color{teal},   % 字符串颜色
+  commentstyle=\color{gray},   % 注释颜色
+  numberstyle=\tiny\color{gray}, % 行号样式
+  breaklines=true              % 自动换行
+}

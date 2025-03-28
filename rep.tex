@@ -1,0 +1,57 @@
+%!LW recipe=latexmk (xelatex)
+\documentclass[a4paper,AutoFakeBold,twoside]{ctexart} % AutoFakeBold 大多数黑体没有加粗的样式 要对黑体加粗必须要这个
+\usepackage{float}
+\usepackage{tabularx}
+% 奇偶页眉必须开启 twoside 才会生效 
+% ctex 宏集手册 https://mirrors.ibiblio.org/CTAN/language/chinese/ctex/ctex.pdf
+% lipsum zhlipsum 分别用于生成随机文本 see: texdoc lipsum, texdoc zhlipsum
+\usepackage{lipsum,zhlipsum}
+% fancyhdr 用于页眉页脚设置 see: texdoc fancyhdr
+\usepackage{fancyhdr}
+% 用于设置页面边距 see: texdoc geometry
+\usepackage{geometry}
+% 用于调整目录 样式 帮助: texdoc titlesec
+\usepackage{titlesec,titletoc}
+% 用于引用最后一页的页码: see texdoc lastpage
+\usepackage{lastpage}
+% 用于编写公式 see texdoc amsmath
+\usepackage{amsmath}
+% 用来 画图 画参考线 see texdoc tikz
+\usepackage{tikz}
+% 插图要用到
+\usepackage{graphicx}
+% 交叉引用
+\usepackage[hidelinks]{hyperref}
+\usepackage{cleveref}
+% 插入代码
+\usepackage{listings}
+% 导入 pdf 格式封面
+\usepackage{pdfpages}
+\usepackage{adjustbox}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{enumitem}
+
+
+
+\newcommand{\thesistitle}{基于DQN的开悟平台实验报告}
+\newcommand{\thesischapter}{\zihao{-5} \leftmark}
+
+\input{font}
+\input{page}
+
+\begin{document}
+\crefname{table}{表}{表}
+\Crefname{table}{表}{表}
+\crefname{figure}{图}{图}
+\Crefname{figure}{图}{图}
+
+\tableofcontents
+
+\clearpage
+
+\input{sec1.tex}
+\input{sec2.tex}
+\input{sec3.tex}
+
+\end{document}
