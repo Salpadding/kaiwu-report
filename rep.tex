@@ -1,4 +1,5 @@
 %!LW recipe=latexmk (xelatex)
+% configure latexmk xelatex as backend for vscode latex-workshop plugin
 \documentclass[a4paper,AutoFakeBold,twoside]{ctexart} % AutoFakeBold 大多数黑体没有加粗的样式 要对黑体加粗必须要这个
 \usepackage{float}
 \usepackage{tabularx}
@@ -16,6 +17,7 @@
 \usepackage{lastpage}
 % 用于编写公式 see texdoc amsmath
 \usepackage{amsmath}
+\usepackage{amsfonts}
 % 用来 画图 画参考线 see texdoc tikz
 \usepackage{tikz}
 % 插图要用到
@@ -31,6 +33,7 @@
 \usepackage{color}
 \usepackage{xcolor}
 \usepackage{enumitem}
+\usepackage[ruled,vlined]{algorithm2e} % 算法排版
 
 
 

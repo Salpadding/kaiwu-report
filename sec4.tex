@@ -2,21 +2,62 @@
 
 \subsection{DQN}
 深度 Q 网络（Deep Q-Network，DQN）是一种基于深度学习和强化学习的算法，用于解决离散动作空间的强化学习问题。
+Deep Q-learning  的目标是最小化如下的函数。
+
+\[
+J = \mathbb{E} \left[ \left( R + \gamma \max_{a \in \mathcal{A}(S')} \hat{q}(S', a, w) - \hat{q}(S,a,w)\right)^2 \right]
+\]
+
+这其中 $S,A,R,S'$ 分别表示当前状态，当前动作，奖励以及下一个状态的随机变量。
+
+为了最小化目标函数，我们要使用梯度下降法，所以要对 $J(w)$ 进行求导。这里为了方便计算，假定 $\gamma \max_{a \in \mathcal{A}(S')} \hat{q}(S', a, w)$ 中的 $w$ 是一个
+固定的值，记为 $w_T$
+
+\[
+\nabla_w J= -2\mathbb{E} \left[ \left( R + \gamma \max_{a \in \mathcal{A}(S')} \hat{q}(S', a, w_T) - \hat{q}(S,a,w)\right) \nabla_w \hat{q}(S,A,w)\right]
+\]
+
+
+
 \subsubsection{算法流程}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{pic/DQN-process.png}
     \caption{\zihao{-5} DQN算法流程}
-    \label{map}
+    \label{dqn-example}
 \end{figure}
 
 \subsubsection{算法伪代码}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\linewidth]{pic/DQN-code.png}
-    \caption{\zihao{-5} DQN算法伪代码}
-    \label{map}
-\end{figure}
+
+\begin{algorithm}[H]
+    \caption{DQN 算法}
+    \SetAlgoLined
+    \DontPrintSemicolon
+      
+    \textbf{Step 1} 初始化经验池为一个容量为 \( N \) 的队列 \( D \)\;
+    
+    \textbf{Step 2} 随机初始化 Eval 网络 \( Q \) 的权重为 \( \theta \)，Target 网络 \( Q' \) 的权重为 \( \theta' \)\;
+    
+    \textbf{Step 3} For episode = 1, \( M \) \textbf{do}：\;
+      \quad 选取初始状态 \( S_0 \)，进行预处理得到 \( \phi_0 = \phi(S_0) \)\;
+      \quad For \( t=1 \), \( T \) \textbf{do}：\;
+        \quad (1) 以 \(\varepsilon\)-greedy 策略选取动作 \( a \)\;
+        \quad (2) 执行动作 \( a \)，并观察得到的奖励和下一时间步的状态\;
+        \quad (3) 将经验样本 \( (\phi_j, a_j, r_j, \phi_{j+1}) \) 存入经验池 \( D \)\;
+        \quad (4) 从 \( D \) 中随机抽取样本 \( (\phi_j, a_j, r_j, \phi_{j+1}) \) 计算 TD target：
+        \[
+        y_j = 
+        \begin{cases} 
+        r_j, & \text{if episode terminates at step } j + 1 \\
+        r_j + \gamma \max_{a'} Q'(\phi_{j+1}, a'; \theta'), & \text{otherwise}
+        \end{cases}
+        \]
+        \quad 对 \( (y_j - Q(\phi_j, a_j; \theta))^2 \) 执行梯度下降，并更新网络 \( Q \) 的参数\;
+        \quad 每 \( C \) 步将网络 \( Q \) 的参数复制给 \( Q' \)\;
+      \quad \textbf{End for}\;
+    \textbf{End for}
+    \end{algorithm}
+
 
 \subsubsection{算法代码}
 
@@ -123,12 +164,13 @@ def forward(self, s, state=None, info=None):
 
 
 \subsection{Target-DQN}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\linewidth]{pic/Double-DQN.png}
-    \caption{\zihao{-5} Double-DQN}
-    \label{map}
-\end{figure}
+
+Q-Learning 中的 TD 目标值 $r + \gamma \max_{a} Q(s', a)$ 中存在 $\max$ 操作。这会引入一个正向的偏差，
+因此建模两个 $Q$ 网络，一个用于选动作，一个用于评估动作
+
+\[
+r + \gamma Q^B \left( s', \arg \max_{a} Q^A(s',a) \right)
+\]
 
 
 \subsubsection{算法代码}
@@ -185,7 +227,7 @@ def forward(self, s, state=None, info=None):
     \centering
     \includegraphics[width=0.8\linewidth]{pic/target-DQN-model.png}
     \caption{\zihao{-5} target-DQN算法模型}
-    \label{map}
+    \label{target-dqn-model}
 \end{figure}
 
 
