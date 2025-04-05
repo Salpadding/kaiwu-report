@@ -1,2 +1,2 @@
 all:
-	latexmk rep -xelatex
+	latexmk rep  -xelatex -f
